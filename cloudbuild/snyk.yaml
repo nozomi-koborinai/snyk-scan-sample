@@ -12,6 +12,7 @@ steps:
     args:
       - -c
       - |
+        npx snyk config set org="nozomi-koborinai"
         CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}"
         npx snyk iac describe \
         --only-unmanaged \
