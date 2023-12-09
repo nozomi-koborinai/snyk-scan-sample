@@ -18,7 +18,8 @@ steps:
         --to="gcp+tf" \
         --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate" \
         --org=nozomi-koborinai \
-        --json > /workspace/snyk_unmanaged.log
+        --json > /workspace/snyk_unmanaged.log 2>/workspace/snyk_error.log \
+        ls -lha /workspace/snyk_unmanaged.log
     secretEnv: ['SNYK_TOKEN']
 
   # Cloud Logging に IaC 管理外のリソースログを書き込む
