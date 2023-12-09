@@ -39,14 +39,4 @@ locals {
     "roles/cloudbuild.builds.builder",
     "roles/cloudscheduler.jobRunner",
   ]
-
-  projects = {
-    "snyk-iac" = {
-      "project_id"   = local.project
-      "include_path" = "cloudbuild/**"
-      "repository"   = "https://github.com/nozomi-koborinai/snyk-scan-sample"
-      "yaml_path"    = "cloudbuild/snyk.yaml"
-      "branch"       = "main"
-    }
-  }
 }
