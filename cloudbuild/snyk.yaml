@@ -1,0 +1,40 @@
+steps:
+  # Snyk をインストール
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '-g', 'snyk']
+
+  # Snyk を使用して IaC 管理外のリソースをチェックし、結果をログファイルに保存
+  - id: "snyk iac unmanaged check"
+    name: node
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        npx snyk config set org="nozomi-koborinai"
+        CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}" npx snyk iac describe 
+        --only-unmanaged 
+        --to="gcp+tf" 
+        --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate"
+        --json > /workspace/snyk_unmanaged.log
+    secretEnv: ['SNYK_TOKEN']
+
+  # Cloud Logging に IaC 管理外のリソースログを書き込む
+  - id: "cloud logging unmanaged"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        echo "write snyk-log"
+        gcloud logging write --payload-type=json snyk-log "$(cat /workspace/snyk_unmanaged.log)"
+
+# Secret Manager から Snyk のトークンを取得
+availableSecrets:
+  secretManager:
+  - versionName: "projects/${PROJECT_ID}/secrets/snyk-token/versions/1"
+    env: 'SNYK_TOKEN'
+
+# その他オプションの設定
+options:
+  logging: CLOUD_LOGGING_ONLY   
+timeout: "43200s"
