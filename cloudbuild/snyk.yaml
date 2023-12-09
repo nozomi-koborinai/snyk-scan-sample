@@ -10,12 +10,13 @@ steps:
     args:
       - -c
       - |
-        npx snyk config set org="nozomi-koborinai"
-        CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}" npx snyk iac describe 
-        --only-unmanaged 
-        --to="gcp+tf" 
-        --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate"
+        npx snyk config set org="nozomi-koborinai" && \
+        CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}" npx snyk iac describe \
+        --only-unmanaged \
+        --to="gcp+tf" \
+        --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate" \
         --json > /workspace/snyk_unmanaged.log
+
     secretEnv: ['SNYK_TOKEN']
 
   # Cloud Logging に IaC 管理外のリソースログを書き込む
