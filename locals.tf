@@ -1,7 +1,7 @@
 locals {
   project = "snyk-iac-sample"
 
-    apis = [
+  apis = [
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
     "storage-api.googleapis.com",
