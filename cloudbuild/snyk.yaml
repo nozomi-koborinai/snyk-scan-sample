@@ -12,7 +12,7 @@ steps:
     args:
       - -c
       - |
-        CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}" \
+        CLOUDSDK_CORE_PROJECT="${_PROJECT_ID}"
         npx snyk iac describe \
         --only-unmanaged \
         --quiet \
@@ -20,7 +20,7 @@ steps:
         --to="gcp+tf" \
         --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate" \
         --org=nozomi-koborinai \
-        --json > /workspace/snyk_unmanaged.log 2>/workspace/snyk_error.log \
+        --json > /workspace/snyk_unmanaged.log 2>/workspace/snyk_error.log
         ls -lha /workspace/snyk_unmanaged.log
     secretEnv: ['SNYK_TOKEN']
 
@@ -31,8 +31,10 @@ steps:
     args:
       - -c
       - |
-        echo "write snyk-log"
-        gcloud logging write --payload-type=json snyk-log "$(cat /workspace/snyk_unmanaged.log)"
+        apt -y update
+        apt install -y jq
+        chmod +x log_write.sh
+        ./log_write.sh "/workspace/snyk_unmanaged.log" "/workspace/snyk_error.log"
 
 # Secret Manager から Snyk のトークンを取得
 availableSecrets:
