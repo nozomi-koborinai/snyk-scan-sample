@@ -1,11 +1,13 @@
 steps:
   # Snyk をインストール
   - name: 'gcr.io/cloud-builders/npm'
+    dir: "cloudbuild"
     args: ['install', '-g', 'snyk']
 
   # Snyk を使用して IaC 管理外のリソースをチェックし、結果をログファイルに保存
   - id: "snyk iac unmanaged check"
     name: node
+    dir: "cloudbuild"
     entrypoint: bash
     args:
       - -c
