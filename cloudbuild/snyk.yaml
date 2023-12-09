@@ -19,7 +19,6 @@ steps:
         --tf-provider-version="4.68.0" \
         --to="gcp+tf" \
         --from="tfstate+gs://snyk-iac-sample-backend/default.tfstate" \
-        --org=nozomi-koborinai \
         --json > /workspace/snyk_unmanaged.log 2>/workspace/snyk_error.log
         ls -lha /workspace/snyk_unmanaged.log
     secretEnv: ['SNYK_TOKEN']
