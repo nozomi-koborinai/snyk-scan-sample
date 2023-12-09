@@ -1,6 +1,10 @@
 locals {
   project = "snyk-iac-sample"
 
+  region = "asia-northeast1"
+
+  time_zone = "Asia/Tokyo"
+
   apis = [
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
@@ -20,4 +24,29 @@ locals {
     "servicecontrol.googleapis.com",
     "cloudscheduler.googleapis.com"
   ]
+
+  snyk_roles = [
+    "roles/viewer",
+    "roles/cloudasset.viewer",
+    "roles/iam.securityReviewer",
+    "roles/cloudbuild.builds.builder",
+    "roles/secretmanager.secretAccessor",
+    "roles/logging.configWriter",
+  ]
+
+  scheduler_roles = [
+    "roles/iam.serviceAccountUser",
+    "roles/cloudbuild.builds.builder",
+    "roles/cloudscheduler.jobRunner",
+  ]
+
+  projects = {
+    "snyk-iac" = {
+      "project_id"   = local.project
+      "include_path" = "cloudbuild/**"
+      "repository"   = "https://github.com/nozomi-koborinai/snyk-scan-sample"
+      "yaml_path"    = "cloudbuild/snyk.yaml"
+      "branch"       = "main"
+    }
+  }
 }
